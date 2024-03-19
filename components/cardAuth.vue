@@ -9,6 +9,7 @@
               v-model="item.value"
               :label="item.label"
               variant="outlined"
+              :type="item.type"
               :rules="item.rule"
               :error-messages="errorMessages"
             ></v-text-field>
@@ -47,7 +48,7 @@
 <script>
 import { authStore } from "~/store/auth.store";
 export default {
-  name: "Card  Store",
+  name: "CardStore",
   setup() {
     const store = authStore();
     let errorMessages = "";
@@ -69,11 +70,25 @@ export default {
     onRegister() {
       this.store.changeStateRegister();
     },
-    onProcess() {
+    async onProcess() {
       this.isCheck = true;
-      setTimeout(() => {
-        this.isCheck = false;
-      }, 3000);
+      try {
+        if (this.store.isRegister) {
+          await this.store.sendRegister({
+            name: this.dataForm[0].value,
+            email: this.dataForm[1].value,
+            password: this.dataForm[2].value,
+            active: true,
+          });
+        } else {
+          await this.store.sendLogin({
+            email: this.dataForm[0],
+            password: this.dataForm[2],
+          });
+        }
+      } catch (error) {
+        console.error("error");
+      }
     },
   },
 };
