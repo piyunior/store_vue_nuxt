@@ -81,13 +81,18 @@ export default {
             active: true,
           });
         } else {
-          await this.store.sendLogin({
-            email: this.dataForm[0],
-            password: this.dataForm[2],
+          const response = await this.store.sendLogin({
+            email: this.dataForm[0].value,
+            password: this.dataForm[1].value,
           });
+          if (response) {
+            this.$router.removeRoute("/users");
+          }
         }
       } catch (error) {
         console.error("error");
+      } finally {
+        this.isCheck = false;
       }
     },
   },

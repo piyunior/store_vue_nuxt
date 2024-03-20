@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
-import { registerUser } from '~/services/auth';
+import axios from 'axios';
+
+const URL_API = 'http://127.0.0.1:8000'
 
 export const authStore = defineStore('auth', {
     state: () => ({
@@ -14,16 +16,20 @@ export const authStore = defineStore('auth', {
         },
         async sendRegister(body) {
             try {
-                await registerUser(body);
+                const response = await axios.post(`${URL_API}/api/login`, body);
             } catch (error) {
-
+                console.log('Error')
             }
         },
         async sendLogin(body) {
             try {
-                await loginUser(body);
+                const response = await axios.post(`${URL_API}/api/login`, body);
+                if (response.status == 200) {
+                    sessionStorage.setItem('token', response.data.token);
+                    return true;
+                }
             } catch (error) {
-
+                console.log(error)
             }
         }
     }

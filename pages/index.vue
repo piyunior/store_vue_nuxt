@@ -17,7 +17,6 @@ export default {
   name: "LoginPage",
   setup() {
     const store = authStore();
-    console.log('Env: ',process.env);
     return { store };
   },
   data() {
